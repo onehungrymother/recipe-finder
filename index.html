@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Recipe Finder — Archive Search</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>Recipe Finder — Archive Search</h1>
+    <p>Search `datas.json` and open matches in the Wayback snapshot.</p>
+
+    <div class="controls">
+      <input id="query" placeholder="Type to search (press Esc to clear)..." autofocus />
+      <label><input id="matchOriginalOnly" type="checkbox" checked /> Match `original` only</label>
+    </div>
+
+    <div id="status">Loading data...</div>
+    <div id="results"></div>
+  </main>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
