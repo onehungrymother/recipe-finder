@@ -3,6 +3,13 @@ let headers = [];
 let rows = [];
 const WAYBACK_PREFIX = 'https://web.archive.org/web/20250814172404/';
 
+function normalizeText(text) {
+  try {
+    text = decodeURIComponent(text);
+  } catch(e) {}
+  return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
 async function loadData(){
   try{
     const res = await fetch('datas.json');
@@ -66,7 +73,7 @@ function renderResults(matches){
 }
 
 function doSearch(){
-  const q = document.getElementById('query').value.trim().toLowerCase();
+  const q = document.getElementById('query').value.trim();
   const onlyOriginal = document.getElementById('matchOriginalOnly').checked;
   if(!q){
     document.getElementById('status').textContent = `Loaded ${rows.length} rows`;
@@ -74,11 +81,19 @@ function doSearch(){
     return;
   }
 
+  const normalizedQ = normalizeText(q);
+  const terms = normalizedQ.split(/\s+/).filter(term => term.length > 0);
+  if(terms.length === 0){
+    document.getElementById('status').textContent = `Loaded ${rows.length} rows`;
+    document.getElementById('results').textContent = '';
+    return;
+  }
+
   const matches = rows.filter(row => {
     if(onlyOriginal){
-      return String(row[0]||'').toLowerCase().includes(q);
+      return terms.every(term => normalizeText(String(row[0]||'')).includes(term));
     }
-    return row.some(cell => String(cell||'').toLowerCase().includes(q));
+    return terms.every(term => row.some(cell => normalizeText(String(cell||'')).includes(term)));
   });
 
   document.getElementById('status').textContent = `Matches: ${matches.length}`;
