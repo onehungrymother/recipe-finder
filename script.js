@@ -17,9 +17,9 @@ async function loadData(){
     const data = await res.json();
     headers = data[0] || [];
     rows = data.slice(1 || 1);
-    document.getElementById('status').textContent = `Loaded ${rows.length} rows`;
+    document.getElementById('status').textContent = `Chargé ${rows.length} lignes`;
   }catch(e){
-    document.getElementById('status').textContent = 'Error loading datas.json';
+    document.getElementById('status').textContent = 'Erreur lors du chargement de datas.json';
     console.error(e);
   }
 }
@@ -28,7 +28,7 @@ function renderResults(matches){
   const container = document.getElementById('results');
   container.innerHTML = '';
   if(matches.length === 0){
-    container.textContent = 'No matches';
+    container.textContent = 'Aucune correspondance';
     return;
   }
 
@@ -59,7 +59,7 @@ function renderResults(matches){
     item.appendChild(meta);
 
     const btn = document.createElement('button');
-    btn.textContent = 'Open Wayback snapshot';
+    btn.textContent = 'Ouvrir la snapshot Wayback';
     btn.addEventListener('click', ()=>{
       const url = WAYBACK_PREFIX + encodeURI(original);
       window.open(url, '_blank', 'noopener');
@@ -76,7 +76,7 @@ function doSearch(){
   const q = document.getElementById('query').value.trim();
   const onlyOriginal = document.getElementById('matchOriginalOnly').checked;
   if(!q){
-    document.getElementById('status').textContent = `Loaded ${rows.length} rows`;
+    document.getElementById('status').textContent = `Chargé ${rows.length} lignes`;
     document.getElementById('results').textContent = '';
     return;
   }
@@ -84,7 +84,7 @@ function doSearch(){
   const normalizedQ = normalizeText(q);
   const terms = normalizedQ.split(/\s+/).filter(term => term.length > 0);
   if(terms.length === 0){
-    document.getElementById('status').textContent = `Loaded ${rows.length} rows`;
+    document.getElementById('status').textContent = `Chargé ${rows.length} lignes`;
     document.getElementById('results').textContent = '';
     return;
   }
@@ -96,7 +96,7 @@ function doSearch(){
     return terms.every(term => row.some(cell => normalizeText(String(cell||'')).includes(term)));
   });
 
-  document.getElementById('status').textContent = `Matches: ${matches.length}`;
+  document.getElementById('status').textContent = `Correspondances : ${matches.length}`;
   renderResults(matches.slice(0, 200));
 }
 
